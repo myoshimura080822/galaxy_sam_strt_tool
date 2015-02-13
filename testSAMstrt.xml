@@ -1,0 +1,122 @@
+<tool id="testSAMstrt" name="testSAMstrt" version="0.01">
+<description>testsdaze</description>
+
+<command interpreter="python">
+
+        testSAMstrt.py --script_path "$runMe" --interpreter "Rscript" 
+            --tool_name "testSAMstrt" --input_tab "$input1" --output_dir "./" --output_tab "$tab_file" --input_npms "$input_npms" --input_grp "$input_grp" 
+</command>
+<inputs>
+<param name="input1"  type="data" format="tabular" label="Select a suitable input file from your history"/> 
+<param name="input_npms"  type="text" value="1000" label="Input number of permutation"/> 
+<param name="input_grp"  type="data" format="tabular" label="Select a suitable input file from your history[ColumnID and Group list]"/> 
+<param name="job_name" type="text" size="30" label="Supply a name for the outputs to remind you what they contain" value="testSAMstrt"/> 
+
+</inputs>
+<outputs>
+ <data format="tabular" name="tab_file" label="${job_name}"/>
+
+</outputs>
+<configfiles>
+<configfile name="runMe">
+cat("SAMstrtDEG Started............\n")
+cat("\n")
+
+library(devtools)
+library(SAMstrt)
+library(compare)
+
+ourargs = commandArgs(TRUE)
+inf = ourargs[1]
+outf = ourargs[2]
+inf_npms = ourargs[3]
+inf_grp = ourargs[4]
+
+inf_npms &lt;- as.numeric(inf_npms)
+
+cat("input file name:");inf
+cat("output file name:");outf
+cat("num of permutations:");inf_npms
+cat("group-list file name:");inf_grp
+cat("\n")
+
+get_all_siggenes &lt;- function(samfit) {
+  siggenes &lt;- samr.compute.siggenes.table(samfit\$samr.obj,
+                                          samfit\$del, samfit\$samr.obj, samfit\$delta.table, all.genes=TRUE)
+  siggenes\$genes.up[, 'Gene ID'] &lt;-
+    rownames(reads)[as.numeric(siggenes\$genes.up[, 'Row'])-1]
+  siggenes\$genes.lo[, 'Gene ID'] &lt;-
+    rownames(reads)[as.numeric(siggenes\$genes.lo[, 'Row'])-1]
+  tmp &lt;- rbind(siggenes\$genes.up, siggenes\$genes.lo)
+  tmp[order(as.numeric(tmp[, 4])), ]
+}
+
+reads.all = read.table(inf,header=T, sep="\t", row.names=1)
+reads = reads.all[which(rowSums(reads.all) &gt; 0), ]
+reads_cols = c(colnames(reads))
+reads_cols
+cat("number of columns: ");length(reads_cols)
+cat("\n")
+
+colname_list = read.table(inf_grp,header=T,sep="\t")
+head(colname_list)
+cat("number of columns and groups: ");length(colname_list)
+cat("\n")
+
+reads02 &lt;- reads[, names(reads) %in% colname_list\$SampleID]
+head(reads02);length(reads02)
+reads02_cols = c(colnames(reads02))
+reads02_cols;length(reads02_cols)
+
+colname_list_sort = colname_list[order(colname_list\$Group),]
+chk_input = as.character(colname_list_sort\$SampleID)
+chk_ret = compare(reads02_cols, chk_input, ignoreOrder=FALSE)
+if (chk_ret\$result == T) {
+  grouping &lt;- colname_list_sort\$Group
+} else {
+  stop("the read group-data SampleID do not accord with the read-count table columns.\n")
+}
+grouping
+
+samfit &lt;- SAMseq(reads02, grouping, resp.type='Two class unpaired', genenames=rownames(reads), nperms=inf_npms)
+siggenes = get_all_siggenes(samfit)
+
+head(siggenes);nrow(siggenes)
+cat("\n")
+
+write.table(siggenes, outf, quote=F, sep="\t", row.names=F, append=F)
+cat("....All Done. End of Script\n")
+</configfile>
+</configfiles>
+
+
+        <tests>
+        <test>
+        <param name="input1" value="testSAMstrt_test1_input.xls" ftype="tabular"/>
+        <param name="job_name" value="test1"/>
+        <param name="runMe" value="$runMe"/>
+        <output name="tab_file" file="testSAMstrt_test1_output.xls" ftype="tabular"/>
+        </test>
+        </tests>
+        
+
+<help>
+
+**SAMstrt in Galaxy**
+statistical test for differential expression in single-cell transcriptome with spike-in normalization.
+
+**Attribution**
+This Galaxy tool was created by mika.yoshimura@riken.jp at 04/02/2015 19:57:37
+using the Galaxy Tool Factory.
+
+See https://bitbucket.org/fubar/galaxytoolfactory for details of that project
+Please cite: Creating re-usable tools from scripts: The Galaxy Tool Factory. Ross Lazarus; Antony Kaspi; Mark Ziemann; The Galaxy Team. 
+Bioinformatics 2012; doi: 10.1093/bioinformatics/bts573
+
+
+</help>
+<citations>
+    
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+</citations>
+</tool>
