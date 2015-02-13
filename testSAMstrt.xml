@@ -1,5 +1,5 @@
 <tool id="testSAMstrt" name="testSAMstrt" version="0.01">
-<description>testsdaze</description>
+<description>SAMstrt for differential expression in single-cell transcriptome</description>
 
 <command interpreter="python">
 
