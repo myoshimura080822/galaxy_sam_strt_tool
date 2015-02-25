@@ -7,10 +7,10 @@
             --tool_name "testSAMstrt" --input_tab "$input1" --output_dir "./" --output_tab "$tab_file" --input_npms "$input_npms" --input_grp "$input_grp" 
 </command>
 <inputs>
-<param name="input1"  type="data" format="tabular" label=">Select a suitable input file from your history"/> 
-<param name="input_npms"  type="text" value="1000" label=">Input number of permutation"/> 
-<param name="input_grp"  type="data" format="tabular" label=">Select a suitable input file from your history[ColumnID and Group list]"/> 
-<param name="job_name" type="text" size="30" label=">Supply a name for the outputs to remind you what they contain" value="testSAMstrt"/> 
+<param name="input1"  type="data" format="tabular" label="Select a suitable input file from your history"/> 
+<param name="input_npms"  type="text" value="1000" label="Input number of permutation"/> 
+<param name="input_grp"  type="data" format="tabular" label="Select a suitable input file from your history[ColumnID and Group list]"/> 
+<param name="job_name" type="text" size="30" label="Supply a name for the outputs to remind you what they contain" value="testSAMstrt"/> 
 
 </inputs>
 <outputs>
