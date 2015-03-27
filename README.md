@@ -1,5 +1,8 @@
 # galaxy_sam_strt_tool
 
-## License (MIT)
+## Galaxy wrappers for SAMstrt
 
-Copyright (c) 2015 Mika Yoshimura and RIKEN Bioinformatics Research Unit Released under the MIT license (http://www.opensource.org/licenses/mit-license.php)
+These wrappers are copyright 2015 Mika Yoshimura and RIKEN Bioinformatics Research Unit Released under the MIT license. (http://www.opensource.org/licenses/mit-license.php)
+
+Currently tested with SAMstrt latest version.
+(https://github.com/shka/R-SAMstrt)
