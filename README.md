@@ -8,3 +8,4 @@ Currently tested with SAMstrt latest version.
 (https://github.com/shka/R-SAMstrt)
 
 Test edit
+Test edit 2
