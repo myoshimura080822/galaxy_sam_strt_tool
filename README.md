@@ -6,3 +6,5 @@ These wrappers are copyright 2015 Mika Yoshimura and RIKEN Bioinformatics Resear
 
 Currently tested with SAMstrt latest version.
 (https://github.com/shka/R-SAMstrt)
+
+Test edit
